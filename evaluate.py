@@ -288,7 +288,7 @@ if __name__ == "__main__":
     
     # Model paths
     BASELINE_MODEL = "best_model_baseline.pth"
-    IMPROVED_MODEL = "best_model_improved_v2.pth"  # Updated to v2 (with reduced dropout)
+    IMPROVED_MODEL = "best_model_improved.pth"  # Trained model from Colab
     
     print("="*70)
     print("SOD MODEL EVALUATION - BASELINE vs IMPROVED")
@@ -326,7 +326,7 @@ if __name__ == "__main__":
             batch_size=BATCH_SIZE,
             device=DEVICE,
             use_improvements=True,
-            model_name="improved_v2"
+            model_name="improved"
         )
         results['improved'] = metrics_improved
     
