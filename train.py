@@ -438,8 +438,8 @@ if __name__ == "__main__":
             lr=LEARNING_RATE,
             patience=PATIENCE,
             device=DEVICE,
-            checkpoint_path="checkpoint_improved.pth",
-            best_path="best_model_improved.pth",
+            checkpoint_path="checkpoint_improved_v2.pth",
+            best_path="best_model_improved_v2.pth",
             resume=True,  # Resume from checkpoint if exists
             model_name="improved"
         )
@@ -506,5 +506,5 @@ if __name__ == "__main__":
         print("  - checkpoint_baseline.pth (baseline checkpoint)")
         print("  - best_model_baseline.pth (best baseline model)")
     if TRAIN_IMPROVED:
-        print("  - checkpoint_improved.pth (improved checkpoint)")
-        print("  - best_model_improved.pth (best improved model)")
+        print("  - checkpoint_improved_v2.pth (improved checkpoint)")
+        print("  - best_model_improved_v2.pth (best improved model)")

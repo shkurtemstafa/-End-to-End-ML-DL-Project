@@ -26,7 +26,7 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, accuracy_score
 import seaborn as sns
 from sod_model import SODModel, compute_iou
 from data_loader import get_data_loaders
@@ -89,6 +89,7 @@ def compute_metrics(model, test_loader, device='cpu', threshold=0.5):
     precision = precision_score(all_targets, all_preds, zero_division=0)
     recall = recall_score(all_targets, all_preds, zero_division=0)
     f1 = f1_score(all_targets, all_preds, zero_division=0)
+    accuracy = accuracy_score(all_targets, all_preds)
     mean_mae = np.mean(all_maes)
 
     return {
@@ -97,6 +98,7 @@ def compute_metrics(model, test_loader, device='cpu', threshold=0.5):
         "Precision": precision,
         "Recall": recall,
         "F1-Score": f1,
+        "Accuracy": accuracy,
         "MAE": mean_mae,
         "predictions": all_preds,
         "targets": all_targets,
@@ -210,6 +212,10 @@ def plot_confusion_matrix(predictions, targets, save_path="confusion_matrix.png"
     print(f"  False Negatives (FN): {cm[1,0]:,}")
     print(f"  True Positives (TP):  {cm[1,1]:,}")
     
+    # Calculate and print accuracy
+    accuracy = (cm[0,0] + cm[1,1]) / cm.sum()
+    print(f"\nAccuracy: {accuracy:.4f} ({accuracy*100:.2f}%)")
+    
     return cm
 
 
@@ -258,6 +264,7 @@ def evaluate_model(model_path, images_path, masks_path, batch_size=8, device='cp
     print(f"Precision:  {metrics['Precision']:.4f}")
     print(f"Recall:     {metrics['Recall']:.4f}")
     print(f"F1-Score:   {metrics['F1-Score']:.4f}")
+    print(f"Accuracy:   {metrics['Accuracy']:.4f}")
     print(f"MAE:        {metrics['MAE']:.4f}")
     print("=" * 70)
 
@@ -288,7 +295,7 @@ if __name__ == "__main__":
     
     # Model paths
     BASELINE_MODEL = "best_model_baseline.pth"
-    IMPROVED_MODEL = "best_model_improved.pth"  # Trained model from Colab
+    IMPROVED_MODEL = "best_model_improved_v2.pth"  # Updated to v2 (with reduced dropout)
     
     print("="*70)
     print("SOD MODEL EVALUATION - BASELINE vs IMPROVED")
@@ -340,7 +347,7 @@ if __name__ == "__main__":
         print(f"{'Metric':<20} {'Baseline':<15} {'Improved':<15} {'Change':<15}")
         print("-"*70)
         
-        for metric_name in ['Loss', 'IoU', 'Precision', 'Recall', 'F1-Score', 'MAE']:
+        for metric_name in ['Loss', 'IoU', 'Precision', 'Recall', 'F1-Score', 'Accuracy', 'MAE']:
             baseline_val = results['baseline'][metric_name]
             improved_val = results['improved'][metric_name]
             
